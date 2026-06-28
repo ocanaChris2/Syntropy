@@ -1,0 +1,37 @@
+[package]
+name = "syntropy"
+version = "0.1.0"
+edition = "2021"
+description = "Streaming lossless neural compressor (phased hybrid architecture)."
+license = "MIT OR Apache-2.0"
+
+# ---------------------------------------------------------------------------
+# The core crate is intentionally std-only and has ZERO external dependencies,
+# so it builds and `cargo test`s fully OFFLINE and bit-exact against the Python
+# reference golden vectors (arithmetic coder, quantizer, classical models, BPE,
+# mixer, streaming pipeline).
+#
+# To wire in the REAL neural forward pass, add these dependencies and implement
+# `model::NeuralModel` for the exported safetensors (see
+# docs/rust_integration_blueprint.md for the full candle loader + forward):
+#
+#   [dependencies]
+#   candle-core = "0.8"          # tensor ops + CPU/CUDA backends
+#   candle-nn   = "0.8"          # layers (embedding, linear, layernorm)
+#   safetensors = "0.4"          # zero-copy weight loading
+#   serde       = { version = "1", features = ["derive"] }
+#   serde_json  = "1"            # parse tokenizer.json / *_config.json
+#   memmap2     = "0.9"          # mmap large weight files
+#   anyhow      = "1"            # error handling at the binary boundary
+#
+# Gate that code behind `#[cfg(feature = "neural")]` and add:
+#   [features]
+#   neural = []
+# ---------------------------------------------------------------------------
+
+[dependencies]
+
+[profile.release]
+opt-level = 3
+lto = true
+codegen-units = 1

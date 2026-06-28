@@ -1,0 +1,22 @@
+# --- Rust ---
+/rust/target/
+**/*.rs.bk
+Cargo.lock
+
+# --- Python ---
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+
+# --- Trained artifacts & data (produced on Kaggle, not committed) ---
+# Keep artifacts/README.md (the schema); ignore the heavy binary exports.
+artifacts/*
+!artifacts/README.md
+work/
+*.safetensors
+*.onnx
+*.npz
+*.npy
+*.pt
+enwik8
+enwik8.*
